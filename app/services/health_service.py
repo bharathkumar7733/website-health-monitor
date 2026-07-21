@@ -41,3 +41,17 @@ def check_website(url: str):
             "status_code": None,
             "message": "Request Timed Out"
         }
+
+    except requests.exceptions.ConnectionError:
+        return {
+            "status": "DOWN",
+            "status_code": None,
+            "message": "Connection Failed"
+        }
+
+    except requests.exceptions.RequestException as e:
+        return {
+            "status": "DOWN",
+            "status_code": None,
+            "message": str(e)
+        }
