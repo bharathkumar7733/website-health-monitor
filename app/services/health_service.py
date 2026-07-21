@@ -20,6 +20,14 @@ def check_website(url: str):
                 "status_code": status,
                 "message": f"Client Error ({status})"
             }
+
+        elif 500 <= status < 600:
+            return {
+                "status": "DOWN",
+                "status_code": status,
+                "message": f"Server Error ({status})"
+            }
+
         else:
             return {
                 "status": "UNKNOWN",
