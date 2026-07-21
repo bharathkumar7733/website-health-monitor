@@ -6,13 +6,20 @@ def check_website(url: str):
     try:
         response = requests.get(url, timeout=5)
         status = response.status_code
-        
-        # Skeleton check logic placeholder
-        return {
-            "status": "UNKNOWN",
-            "status_code": status,
-            "message": "Response received"
-        }
+
+        if 200 <= status < 400:
+            return {
+                "status": "UP",
+                "status_code": status,
+                "message": "Website is Healthy"
+            }
+        else:
+            return {
+                "status": "UNKNOWN",
+                "status_code": status,
+                "message": "Unexpected Status Code"
+            }
+
     except requests.exceptions.Timeout:
         return {
             "status": "DOWN",
