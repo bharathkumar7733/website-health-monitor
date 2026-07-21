@@ -55,3 +55,5 @@ def check_website(url: str):
             "status_code": None,
             "message": str(e)
         }
+
+# End of health service helper
