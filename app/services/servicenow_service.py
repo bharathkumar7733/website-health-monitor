@@ -57,5 +57,20 @@ def create_incident(short_description: str, description: str):
         "Accept": "application/json",
         "Content-Type": "application/json",
     }
-    # POST execution to be implemented
-    return {"incident_number": "INC0000000", "sys_id": "dummy"}
+
+    response = requests.post(
+        url,
+        auth=(SERVICENOW_USERNAME, SERVICENOW_PASSWORD),
+        headers=headers,
+        json=payload,
+        timeout=10,
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    return {
+        "incident_number": data["result"]["number"],
+        "sys_id": data["result"]["sys_id"],
+    }
