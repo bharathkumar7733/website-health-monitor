@@ -4,11 +4,15 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
+from app.routers.monitor import router
+
 
 app = FastAPI(
     title="Website Health Monitor",
     version="1.0.0"
 )
+
+app.include_router(router)
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
