@@ -42,3 +42,20 @@ def find_existing_incident(website_url: str):
         }
 
     return None
+
+def create_incident(short_description: str, description: str):
+    url = f"{SERVICENOW_INSTANCE}/api/now/table/incident"
+
+    payload = {
+        "short_description": short_description,
+        "description": description,
+        "impact": "2",
+        "urgency": "2",
+    }
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+    }
+    # POST execution to be implemented
+    return {"incident_number": "INC0000000", "sys_id": "dummy"}
