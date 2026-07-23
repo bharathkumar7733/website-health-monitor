@@ -22,5 +22,23 @@ def find_existing_incident(website_url: str):
         "sysparm_fields": "number,sys_id",
         "sysparm_limit": "1"
     }
-    # Response code to be implemented
+
+    response = requests.get(
+        url,
+        auth=(SERVICENOW_USERNAME, SERVICENOW_PASSWORD),
+        headers=headers,
+        params=params,
+        timeout=10
+    )
+
+    response.raise_for_status()
+
+    incidents = response.json()["result"]
+
+    if incidents:
+        return {
+            "incident_number": incidents[0]["number"],
+            "sys_id": incidents[0]["sys_id"]
+        }
+
     return None
