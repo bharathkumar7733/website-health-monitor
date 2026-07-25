@@ -78,3 +78,17 @@ def start_monitoring(url: str, interval: int):
     thread.start()
 
     return True
+
+
+def stop_monitoring():
+
+    stop_event.set()
+
+    monitoring_state["running"] = False
+
+    return True
+
+
+def get_monitoring_status():
+
+    return monitoring_state
