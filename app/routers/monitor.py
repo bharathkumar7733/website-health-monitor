@@ -1,10 +1,16 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.models.schemas import (
+    StartMonitoringRequest,
     WebsiteRequest,
     WebsiteResponse,
 )
 from app.services.health_service import check_website
+from app.services.monitoring_service import (
+    get_monitoring_status,
+    start_monitoring,
+    stop_monitoring,
+)
 from app.services.servicenow_service import (
     create_incident,
     find_existing_incident,
@@ -60,3 +66,37 @@ def monitor_website(request: WebsiteRequest):
             )
 
     return result
+
+
+@router.post("/start")
+def start_monitor(request: StartMonitoringRequest):
+    started = start_monitoring(
+        request.url,
+        request.interval
+    )
+
+    if not started:
+        raise HTTPException(
+            status_code=400,
+            detail="Monitoring is already running"
+        )
+
+    return {
+        "message": "Monitoring started",
+        "url": request.url,
+        "interval": request.interval
+    }
+
+
+@router.post("/stop")
+def stop_monitor():
+    stop_monitoring()
+
+    return {
+        "message": "Monitoring stopped"
+    }
+
+
+@router.get("/status")
+def monitoring_status():
+    return get_monitoring_status()
