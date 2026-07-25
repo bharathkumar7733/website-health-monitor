@@ -21,3 +21,9 @@ A lightweight website health monitoring application built with FastAPI and integ
    ```bash
    uvicorn app.main:app --reload
    ```
+
+## Features
+
+- **Single Health Check**: Immediately query a website's health state.
+- **Continuous Monitoring**: Run monitoring on a daemon thread at regular intervals.
+- **ServiceNow Integration**: Automatically searches for existing incidents or creates new ones if a website goes down.
