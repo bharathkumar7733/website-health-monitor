@@ -20,6 +20,14 @@ stop_event = threading.Event()
 
 def monitoring_loop(url: str, interval: int):
     while not stop_event.is_set():
-        # Loop body to be implemented
+        result = check_website(url)
+
+        monitoring_state["last_result"] = result
+
+        if result["status"] == "UP":
+            logger.info(
+                f"Continuous Monitor | Website: {url} | "
+                f"Status: UP | HTTP Status: {result['status_code']}"
+            )
         stop_event.wait(interval)
     monitoring_state["running"] = False
