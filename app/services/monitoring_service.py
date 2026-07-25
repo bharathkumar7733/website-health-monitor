@@ -57,3 +57,24 @@ def monitoring_loop(url: str, interval: int):
         stop_event.wait(interval)
 
     monitoring_state["running"] = False
+
+def start_monitoring(url: str, interval: int):
+
+    if monitoring_state["running"]:
+        return False
+
+    monitoring_state["running"] = True
+    monitoring_state["url"] = url
+    monitoring_state["interval"] = interval
+
+    stop_event.clear()
+
+    thread = threading.Thread(
+        target=monitoring_loop,
+        args=(url, interval),
+        daemon=True
+    )
+
+    thread.start()
+
+    return True
