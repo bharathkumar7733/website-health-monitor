@@ -29,5 +29,31 @@ def monitoring_loop(url: str, interval: int):
                 f"Continuous Monitor | Website: {url} | "
                 f"Status: UP | HTTP Status: {result['status_code']}"
             )
+
+        elif result["status"] == "DOWN":
+            existing_incident = find_existing_incident(url)
+
+            if existing_incident:
+                logger.warning(
+                    f"Continuous Monitor | Website: {url} | "
+                    f"Status: DOWN | "
+                    f"Incident: {existing_incident['incident_number']} | "
+                    f"Action: Existing incident returned"
+                )
+
+            else:
+                incident = create_incident(
+                    short_description="Website Down",
+                    description=f"{url} - {result['message']}"
+                )
+
+                logger.error(
+                    f"Continuous Monitor | Website: {url} | "
+                    f"Status: DOWN | "
+                    f"Incident: {incident['incident_number']} | "
+                    f"Action: New incident created"
+                )
+
         stop_event.wait(interval)
+
     monitoring_state["running"] = False
