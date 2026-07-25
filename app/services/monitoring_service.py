@@ -17,3 +17,9 @@ monitoring_state = {
 }
 
 stop_event = threading.Event()
+
+def monitoring_loop(url: str, interval: int):
+    while not stop_event.is_set():
+        # Loop body to be implemented
+        stop_event.wait(interval)
+    monitoring_state["running"] = False
