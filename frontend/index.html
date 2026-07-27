@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Website Health Monitor</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+</head>
+
+<body>
+
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <main class="container">
+
+        <header class="topbar">
+            <div class="brand-section">
+                <div class="brand-icon">🌐</div>
+
+                <div>
+                    <h1>Website Health Monitor</h1>
+
+                    <p class="subtitle">
+                        FastAPI · ServiceNow · Continuous Monitoring
+                    </p>
+                </div>
+            </div>
+
+            <div class="system-badge">
+                <span class="status-dot"></span>
+                System Online
+            </div>
+        </header>
+
+        <section class="monitor-card glass-card">
+
+            <div class="section-heading">
+                <div>
+                    <span class="section-label">MONITORING CONTROL</span>
+                    <h2>Configure Website Monitoring</h2>
+                </div>
+
+                <div class="section-icon">📡</div>
+            </div>
+
+            <div class="form-grid">
+
+                <div class="input-group website-input">
+                    <label for="website-url">
+                        Website URL
+                    </label>
+
+                    <div class="input-wrapper">
+                        <span class="input-icon">🔗</span>
+
+                        <input
+                            type="url"
+                            id="website-url"
+                            placeholder="https://www.example.com"
+                            autocomplete="url"
+                        >
+                    </div>
+                </div>
+
+                <div class="input-group interval-input">
+                    <label for="interval">
+                        Check Interval
+                    </label>
+
+                    <select id="interval">
+                        <option value="10">10 Seconds</option>
+                        <option value="30">30 Seconds</option>
+                        <option value="60">1 Minute</option>
+                        <option value="300">5 Minutes</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="button-group">
+
+                <button id="check-button" type="button">
+                    <span>🔍</span>
+                    Check Website
+                </button>
+
+                <button id="start-button" type="button">
+                    <span>▶</span>
+                    Start Monitoring
+                </button>
+
+                <button id="stop-button" type="button">
+                    <span>■</span>
+                    Stop Monitoring
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="dashboard-grid">
+
+            <article class="status-summary-card glass-card">
+
+                <div class="card-title-row">
+                    <div>
+                        <span class="section-label">LIVE HEALTH</span>
+                        <h2>Website Status</h2>
+                    </div>
+
+                    <div class="health-orb">
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="main-status">
+                    <div class="status-icon-circle">
+                        ⚡
+                    </div>
+
+                    <div>
+                        <p class="status-caption">
+                            Current Status
+                        </p>
+
+                        <p id="website-status" class="status-value">
+                            Not checked
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mini-stat-grid">
+
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">
+                            HTTP Status
+                        </span>
+
+                        <span id="status-code" class="mini-stat-value">
+                            -
+                        </span>
+                    </div>
+
+                    <div class="mini-stat">
+                        <span class="mini-stat-label">
+                            Monitoring
+                        </span>
+
+                        <span id="monitoring-state" class="mini-stat-value">
+                            Stopped
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+            <article class="details-card glass-card">
+
+                <div class="card-title-row">
+                    <div>
+                        <span class="section-label">MONITOR DETAILS</span>
+                        <h2>Current Session</h2>
+                    </div>
+
+                    <div class="section-icon">📊</div>
+                </div>
+
+                <div class="details-list">
+
+                    <div class="detail-row">
+                        <div class="detail-name">
+                            <span>🌐</span>
+                            Website
+                        </div>
+
+                        <span id="status-url" class="detail-value">
+                            Not selected
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-name">
+                            <span>📝</span>
+                            Incident Number
+                        </div>
+
+                        <span id="incident-number" class="detail-value">
+                            None
+                        </span>
+                    </div>
+
+                    <div class="detail-row">
+                        <div class="detail-name">
+                            <span>⚙️</span>
+                            Incident Action
+                        </div>
+
+                        <span id="incident-action" class="detail-value">
+                            None
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+        <section class="activity-card glass-card">
+
+            <div class="section-heading">
+                <div>
+                    <span class="section-label">SYSTEM WORKFLOW</span>
+                    <h2>Monitoring Pipeline</h2>
+                </div>
+
+                <div class="section-icon">🛰️</div>
+            </div>
+
+            <div class="pipeline">
+
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">1</div>
+
+                    <div>
+                        <h3>Health Check</h3>
+                        <p>
+                            FastAPI checks website availability.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-line"></div>
+
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">2</div>
+
+                    <div>
+                        <h3>Incident Search</h3>
+                        <p>
+                            Existing ServiceNow incidents are checked.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="pipeline-line"></div>
+
+                <div class="pipeline-item">
+                    <div class="pipeline-icon">3</div>
+
+                    <div>
+                        <h3>Automation</h3>
+                        <p>
+                            A new incident is created when required.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <footer>
+            <p>
+                Built with Python, FastAPI, JavaScript and ServiceNow
+            </p>
+        </footer>
+
+    </main>
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>
