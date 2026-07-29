@@ -337,3 +337,140 @@ The demo walks through:
 3. Simulating a website outage and watching the ServiceNow incident get created automatically
 4. Using continuous monitoring with a 30-second interval
 5. Verifying the incident deduplication — the same incident is returned on subsequent DOWN checks
+
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Python **3.10+**
+- A [ServiceNow Developer Instance](https://developer.servicenow.com/) (free)
+- Git
+
+### 1 — Clone the repository
+
+```bash
+git clone https://github.com/bharathkumar7733/website-health-monitor.git
+cd website-health-monitor
+```
+
+### 2 — Create and activate a virtual environment
+
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS / Linux
+python -m venv venv
+source venv/bin/activate
+```
+
+### 3 — Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4 — Configure environment variables
+
+```bash
+cp .env.example .env
+```
+
+Open `.env` and fill in your ServiceNow credentials:
+
+```env
+SERVICENOW_INSTANCE=https://dev12345.service-now.com
+SERVICENOW_USERNAME=admin
+SERVICENOW_PASSWORD=your_password
+```
+
+### 5 — Run the application
+
+```bash
+uvicorn app.main:app --reload
+```
+
+Open your browser at **http://localhost:8000** — the dashboard loads immediately.
+
+> Swagger UI is available at **http://localhost:8000/docs**
+
+---
+
+## 🐳 Docker Deployment
+
+No Python installation required — just Docker.
+
+### Build & run
+
+```bash
+# Build the image
+docker build -t website-health-monitor .
+
+# Run with your .env file mounted
+docker run -d \
+  --name health-monitor \
+  -p 8000:8000 \
+  --env-file .env \
+  website-health-monitor
+```
+
+### Access the app
+
+```
+Dashboard  →  http://localhost:8000
+API Docs   →  http://localhost:8000/docs
+```
+
+### Useful Docker commands
+
+```bash
+# View logs
+docker logs -f health-monitor
+
+# Stop the container
+docker stop health-monitor
+
+# Remove the container
+docker rm health-monitor
+
+# Rebuild after code changes
+docker build -t website-health-monitor . && docker run -d --name health-monitor -p 8000:8000 --env-file .env website-health-monitor
+```
+
+---
+
+## 📁 Project Structure
+
+```
+website-health-monitor/
+├── app/
+│   ├── main.py                   # FastAPI app entry point, static file mounting
+│   ├── core/
+│   │   └── config.py             # Loads and validates .env variables
+│   ├── models/
+│   │   └── schemas.py            # Pydantic request/response models
+│   ├── routers/
+│   │   └── monitor.py            # /monitor/* API endpoints
+│   ├── services/
+│   │   ├── health_service.py     # HTTP health check logic
+│   │   ├── monitoring_service.py # Daemon thread continuous monitoring
+│   │   └── servicenow_service.py # ServiceNow REST API integration
+│   └── utils/
+│       └── logger.py             # Structured file logger
+├── frontend/
+│   ├── index.html                # Dashboard UI
+│   ├── script.js                 # Async API calls, live polling
+│   └── style.css                 # Glassmorphism design
+├── screenshots/                  # App screenshots for documentation
+├── demo video/                   # Local demo recording
+├── .env.example                  # Environment variable template
+├── .gitignore                    # Excludes venv, .env, logs, __pycache__
+├── Dockerfile                    # Container build instructions
+├── requirements.txt              # Pinned Python dependencies
+├── LICENSE                       # MIT License
+└── README.md                     # This file
+```
