@@ -304,3 +304,36 @@ POST /monitor/check  {"url": "https://example.com"}
                                └─ create_incident → POST ServiceNow API
                                      └─ return new incident_number
 ```
+
+
+---
+
+## 📸 Screenshots
+
+### Dashboard — System Online
+![Dashboard](screenshots/dashboard.png)
+
+### Website UP — Healthy Response
+![Website UP](screenshots/websiteUP.png)
+
+### Website DOWN — Incident Triggered
+![Website DOWN](screenshots/websitedown.png)
+
+### ServiceNow Incidents Panel
+![Incidents](screenshots/incidents.png)
+
+### Docker Running
+![Docker Running](screenshots/DOCKERrunning.png)
+
+---
+
+## 🎬 Demo Video
+
+▶ **[Watch the full demo on Google Drive](https://drive.google.com/file/d/190pCN6ECqXZPCJXbAt6J_Lsub9w_eUbq/view?usp=sharing)**
+
+The demo walks through:
+1. Starting the FastAPI server (local and Docker)
+2. Running a single health check on a live website
+3. Simulating a website outage and watching the ServiceNow incident get created automatically
+4. Using continuous monitoring with a 30-second interval
+5. Verifying the incident deduplication — the same incident is returned on subsequent DOWN checks
