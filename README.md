@@ -505,3 +505,46 @@ Ready to copy-paste into your CV, LinkedIn, or portfolio:
 Add these topics to your repo via **Settings → Topics** on GitHub:
 
 `python` · `fastapi` · `servicenow` · `monitoring` · `health-check` · `docker` · `itsm` · `incident-management` · `rest-api` · `uvicorn` · `pydantic` · `devops` · `automation` · `dashboard` · `website-monitor`
+
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome. Here's how to get started:
+
+```bash
+# Fork the repo, then:
+git clone https://github.com/YOUR_USERNAME/website-health-monitor.git
+cd website-health-monitor
+
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+# macOS / Linux
+python -m venv venv
+source venv/bin/activate
+
+pip install -r requirements.txt
+cp .env.example .env   # fill in your ServiceNow credentials
+uvicorn app.main:app --reload
+```
+
+Please open an issue first for major changes, so we can discuss the approach before you invest time in a pull request.
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+Built with ❤️ by [Bharath Kumar Chappa](https://github.com/bharathkumar7733)
+
+⭐ Star this repo if you found it useful!
+
+</div>
