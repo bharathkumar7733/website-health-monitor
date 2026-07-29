@@ -199,3 +199,108 @@ Returns the current monitoring state, target URL, interval, and the last health 
   }
 }
 ```
+
+
+---
+
+## 🏗️ Architecture
+
+### System Flow Diagram
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                        USER BROWSER                                   │
+│                   (Glassmorphism Dashboard)                           │
+└─────────────────────────┬────────────────────────────────────────────┘
+                           │  HTTP (fetch API)
+                           ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│                      FASTAPI APPLICATION                              │
+│                     (app/main.py · port 8000)                        │
+│                                                                       │
+│   GET  /              → Serves index.html                            │
+│   /static/*           → Serves CSS / JS                              │
+│   /monitor/*          → APIRouter (app/routers/monitor.py)           │
+└─────────┬───────────────────────────────────┬────────────────────────┘
+          │                                   │
+          ▼                                   ▼
+┌─────────────────────┐           ┌───────────────────────────────────┐
+│   health_service    │           │        monitoring_service          │
+│  check_website(url) │           │  start_monitoring(url, interval)  │
+│                     │           │  stop_monitoring()                 │
+│  → HTTP GET target  │           │  get_monitoring_status()          │
+│  → Classify status  │           │                                   │
+│    UP / DOWN /       │           │  Daemon Thread ──────────────────►│
+│    UNKNOWN           │           │  (calls health_service in loop)   │
+└─────────┬───────────┘           └───────────────┬───────────────────┘
+          │                                       │
+          └────────────────┬──────────────────────┘
+                           │  On DOWN status
+                           ▼
+┌──────────────────────────────────────────────────────────────────────┐
+│                    servicenow_service                                 │
+│                                                                       │
+│  find_existing_incident(url)  →  GET  /api/now/table/incident        │
+│       ↓ None found                                                    │
+│  create_incident(desc)        →  POST /api/now/table/incident        │
+│                                                                       │
+│  Auth: Basic (SERVICENOW_USERNAME : SERVICENOW_PASSWORD)             │
+│  Instance: SERVICENOW_INSTANCE (from .env)                           │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+### Mermaid Flow Diagram
+
+```mermaid
+flowchart TD
+    A[👤 User opens dashboard] --> B[Frontend HTML/CSS/JS]
+    B --> C{User action}
+
+    C -->|Check Website| D[POST /monitor/check]
+    C -->|Start Monitoring| E[POST /monitor/start]
+    C -->|Stop Monitoring| F[POST /monitor/stop]
+    B -->|Auto-poll every 5s| G[GET /monitor/status]
+
+    D --> H[health_service.check_website]
+    E --> I[monitoring_service.start_monitoring]
+    I --> J[🔁 Daemon Thread Loop]
+    J --> H
+
+    H --> K{HTTP Response}
+    K -->|200–399| L[✅ Status: UP]
+    K -->|400–599| M[❌ Status: DOWN]
+    K -->|Timeout/Error| M
+
+    M --> N[servicenow_service.find_existing_incident]
+    N -->|Found| O[Return existing incident number]
+    N -->|Not found| P[servicenow_service.create_incident]
+    P --> Q[🎫 New ServiceNow Incident Created]
+
+    L --> R[📝 Log INFO]
+    O --> S[📝 Log WARNING]
+    Q --> T[📝 Log ERROR]
+
+    R & S & T --> U[Response returned to Dashboard]
+    G --> V[Live status update in UI]
+```
+
+### Request Lifecycle — Single Health Check
+
+```
+POST /monitor/check  {"url": "https://example.com"}
+         │
+         ├─► health_service.check_website("https://example.com")
+         │         │
+         │         ├─ requests.get(url, timeout=5)
+         │         │       ├─ 200-399  → {"status":"UP",  "status_code":200}
+         │         │       ├─ 400-499  → {"status":"DOWN","message":"Client Error"}
+         │         │       ├─ 500-599  → {"status":"DOWN","message":"Server Error"}
+         │         │       ├─ Timeout  → {"status":"DOWN","message":"Request Timed Out"}
+         │         │       └─ ConnErr  → {"status":"DOWN","message":"Connection Failed"}
+         │
+         └─ (if DOWN) ──► servicenow_service
+                               ├─ find_existing_incident → GET ServiceNow API
+                               │     └─ found  → return incident_number
+                               └─ create_incident → POST ServiceNow API
+                                     └─ return new incident_number
+```
