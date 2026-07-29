@@ -474,3 +474,34 @@ website-health-monitor/
 ├── LICENSE                       # MIT License
 └── README.md                     # This file
 ```
+
+
+---
+
+## 🏷️ Resume Bullet Points
+
+Ready to copy-paste into your CV, LinkedIn, or portfolio:
+
+---
+
+**Website Health Monitor** | Python · FastAPI · ServiceNow · Docker
+
+- Built a real-time website availability monitoring system using **FastAPI** and **Python**, capable of performing HTTP health checks and classifying responses as UP, DOWN, or UNKNOWN based on HTTP status codes and connection errors.
+
+- Integrated with the **ServiceNow REST API** (Table API) to automatically create P2 incident tickets when a monitored website goes down, and implemented deduplication logic to prevent redundant incidents for the same outage.
+
+- Designed a **continuous monitoring daemon** using Python's `threading` module, allowing background polling at configurable intervals (10s–5min) without blocking the main API thread.
+
+- Developed a **glassmorphism-styled real-time dashboard** in Vanilla JS that polls the `/monitor/status` endpoint every 5 seconds to display live website health status and active incident information.
+
+- Containerised the full application with **Docker**, enabling one-command deployment (`docker run`) with environment variable injection via `--env-file`.
+
+- Applied **clean architecture principles** — separating concerns across routers, services, and models — resulting in a modular, testable codebase following REST API best practices.
+
+---
+
+### 🏷️ Suggested GitHub Repository Topics
+
+Add these topics to your repo via **Settings → Topics** on GitHub:
+
+`python` · `fastapi` · `servicenow` · `monitoring` · `health-check` · `docker` · `itsm` · `incident-management` · `rest-api` · `uvicorn` · `pydantic` · `devops` · `automation` · `dashboard` · `website-monitor`
